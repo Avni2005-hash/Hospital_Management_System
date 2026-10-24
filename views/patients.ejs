@@ -1,0 +1,32 @@
+<%- include('header') %>
+<div class="panel">
+  <div class="top">
+    <h1>Registered patients</h1>
+    <a class="btn" href="/patients/new">Register patient</a>
+  </div>
+  <% if (success) { %><div class="msg ok" role="status"><%= success %></div><% } %>
+  <% if (patients.length === 0) { %>
+    <p>No patients registered yet. Select Register patient to add the first one.</p>
+  <% } else { %>
+  <div style="overflow-x:auto">
+  <table>
+    <thead><tr><th>ID</th><th>Name</th><th>Date of birth</th><th>Gender</th><th>Contact</th><th>Department</th><th>Priority</th><th>Status</th></tr></thead>
+    <tbody>
+    <% patients.forEach(p => { %>
+      <tr>
+        <td><%= p.id %></td>
+        <td><%= p.first_name %> <%= p.last_name %></td>
+        <td><%= p.dob %></td>
+        <td><%= p.gender %></td>
+        <td><%= p.contact %></td>
+        <td><%= p.department %></td>
+        <td><span class="badge <%= p.priority %>"><%= p.priority %></span></td>
+        <td><%= p.status %></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table>
+  </div>
+  <% } %>
+</div>
+<%- include('footer') %>

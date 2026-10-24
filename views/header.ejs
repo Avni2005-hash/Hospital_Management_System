@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hospital Resource Allocation</title>
+<style>
+  :root { --ink:#1f2933; --muted:#5f6c7b; --line:#d5dde5; --bg:#f3f6f9; --brand:#0b5c7a; --err:#b42318; --warn:#9a5b00; --ok:#18794e; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink); background:var(--bg); }
+  header { background:var(--brand); color:#fff; padding:12px 24px; display:flex; align-items:center; gap:20px; }
+  header a { color:#fff; text-decoration:none; }
+  header .title { font-weight:600; font-size:17px; margin-right:auto; }
+  header form { margin:0; }
+  main { max-width:960px; margin:24px auto; padding:0 16px; }
+  .panel { background:#fff; border:1px solid var(--line); border-radius:6px; padding:24px; }
+  h1 { font-size:22px; margin:0 0 16px; }
+  label { display:block; font-weight:600; margin:14px 0 4px; }
+  input, select { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:4px; font:inherit; background:#fff; }
+  input:focus, select:focus, button:focus-visible, a:focus-visible { outline:2px solid var(--brand); outline-offset:1px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+  @media (max-width:640px) { .grid { grid-template-columns:1fr; } }
+  .field-error { color:var(--err); font-size:13px; margin-top:3px; }
+  .input-error { border-color:var(--err); }
+  .btn { display:inline-block; padding:9px 18px; border:0; border-radius:4px; background:var(--brand); color:#fff; font:inherit; font-weight:600; cursor:pointer; text-decoration:none; }
+  .btn.link { background:transparent; color:#fff; padding:6px 8px; border:1px solid rgba(255,255,255,.5); }
+  .btn.secondary { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .actions { margin-top:22px; display:flex; gap:10px; }
+  .msg { padding:10px 14px; border-radius:4px; margin-bottom:16px; border:1px solid; }
+  .msg.ok { background:#e9f6ef; color:var(--ok); border-color:#b7dfc9; }
+  .msg.warn { background:#fff4e0; color:var(--warn); border-color:#f0d29a; }
+  .msg.err { background:#fdecea; color:var(--err); border-color:#f3b8b2; }
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); }
+  th { color:var(--muted); font-weight:600; font-size:13px; }
+  .badge { display:inline-block; padding:2px 9px; border-radius:10px; font-size:12px; font-weight:600; }
+  .badge.Emergency { background:#fdecea; color:var(--err); }
+  .badge.Urgent { background:#fff4e0; color:var(--warn); }
+  .badge.Routine { background:#e9f6ef; color:var(--ok); }
+  .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+  .top h1 { margin:0; }
+</style>
+</head>
+<body>
+<header>
+  <span class="title">Hospital Resource Allocation</span>
+  <% if (user) { %>
+    <a href="/patients">Patients</a>
+    <span><%= user.username %> (<%= user.role %>)</span>
+    <form method="post" action="/logout"><button class="btn link" type="submit">Log out</button></form>
+  <% } %>
+</header>
+<main>

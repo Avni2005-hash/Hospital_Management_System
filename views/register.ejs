@@ -1,0 +1,63 @@
+<%- include('header') %>
+<%
+  const v = (k) => (values[k] || '');
+  const cls = (k) => (errors[k] ? 'input-error' : '');
+%>
+<div class="panel">
+  <h1>Register patient</h1>
+  <% if (warning) { %><div class="msg warn" role="alert"><%= warning %></div><% } %>
+  <% if (Object.keys(errors).length) { %><div class="msg err" role="alert">Fix the highlighted fields and save again.</div><% } %>
+  <form method="post" action="/patients/new" novalidate>
+    <div class="grid">
+      <div>
+        <label for="first_name">First name</label>
+        <input id="first_name" name="first_name" class="<%= cls('first_name') %>" value="<%= v('first_name') %>">
+        <% if (errors.first_name) { %><div class="field-error" role="alert"><%= errors.first_name %></div><% } %>
+      </div>
+      <div>
+        <label for="last_name">Last name</label>
+        <input id="last_name" name="last_name" class="<%= cls('last_name') %>" value="<%= v('last_name') %>">
+        <% if (errors.last_name) { %><div class="field-error" role="alert"><%= errors.last_name %></div><% } %>
+      </div>
+      <div>
+        <label for="dob">Date of birth</label>
+        <input id="dob" name="dob" type="date" class="<%= cls('dob') %>" value="<%= v('dob') %>">
+        <% if (errors.dob) { %><div class="field-error" role="alert"><%= errors.dob %></div><% } %>
+      </div>
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender" class="<%= cls('gender') %>">
+          <option value="">Select</option>
+          <% genders.forEach(g => { %><option <%= v('gender') === g ? 'selected' : '' %>><%= g %></option><% }) %>
+        </select>
+        <% if (errors.gender) { %><div class="field-error" role="alert"><%= errors.gender %></div><% } %>
+      </div>
+      <div>
+        <label for="contact">Contact number (10 digits)</label>
+        <input id="contact" name="contact" inputmode="numeric" class="<%= cls('contact') %>" value="<%= v('contact') %>">
+        <% if (errors.contact) { %><div class="field-error" role="alert"><%= errors.contact %></div><% } %>
+      </div>
+      <div>
+        <label for="department">Required department</label>
+        <select id="department" name="department" class="<%= cls('department') %>">
+          <option value="">Select</option>
+          <% departments.forEach(d => { %><option <%= v('department') === d ? 'selected' : '' %>><%= d %></option><% }) %>
+        </select>
+        <% if (errors.department) { %><div class="field-error" role="alert"><%= errors.department %></div><% } %>
+      </div>
+      <div>
+        <label for="priority">Priority</label>
+        <select id="priority" name="priority" class="<%= cls('priority') %>">
+          <option value="">Select</option>
+          <% priorities.forEach(p => { %><option <%= v('priority') === p ? 'selected' : '' %>><%= p %></option><% }) %>
+        </select>
+        <% if (errors.priority) { %><div class="field-error" role="alert"><%= errors.priority %></div><% } %>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn" type="submit">Register patient</button>
+      <a class="btn secondary" href="/patients">Cancel</a>
+    </div>
+  </form>
+</div>
+<%- include('footer') %>

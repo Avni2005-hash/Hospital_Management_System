@@ -1,0 +1,13 @@
+<%- include('header') %>
+<div class="panel" style="max-width:380px;margin:40px auto;">
+  <h1>Log in</h1>
+  <% if (error) { %><div class="msg err" role="alert"><%= error %></div><% } %>
+  <form method="post" action="/login" novalidate>
+    <label for="username">Username</label>
+    <input id="username" name="username" autocomplete="username" autofocus>
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password">
+    <div class="actions"><button class="btn" type="submit">Log in</button></div>
+  </form>
+</div>
+<%- include('footer') %>

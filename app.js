@@ -17,6 +17,7 @@ app.use((req, res, next) => { res.locals.user = req.session.user || null; next()
 
 app.use('/', require('./routes/auth'));
 app.use('/patients', require('./routes/patients'));
+app.use('/allocations', require('./routes/allocations'));
 app.get('/', (req, res) => res.redirect(req.session.user ? '/patients' : '/login'));
 
 app.use((err, req, res, next) => {

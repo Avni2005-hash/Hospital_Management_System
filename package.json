@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "seed": "node db/seed.js",
-    "test": "node --test test/validation.test.js"
+    "test": "node --test test/validation.test.js test/priority.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

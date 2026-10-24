@@ -1,0 +1,68 @@
+<%- include('header') %>
+<div class="panel">
+  <div class="top"><h1>Allocate resources</h1><a class="btn secondary" href="/allocations">Back</a></div>
+  <% if (ok) { %><div class="msg ok" role="status"><%= ok %></div><% } %>
+  <% if (err) { %><div class="msg err" role="alert"><%= err %></div><% } %>
+
+  <p>
+    <strong><%= patient.first_name %> <%= patient.last_name %></strong>
+    &middot; <span class="badge <%= patient.priority %>"><%= patient.priority %></span>
+    &middot; Required department: <%= patient.department %>
+  </p>
+
+  <% const canAllocate = s.doctors.length > 0 && s.beds.length > 0; %>
+  <% if (!s.doctors.length) { %>
+    <div class="msg warn" role="alert">No suitable <%= patient.department %> doctor is available.</div>
+  <% } %>
+  <% if (!s.beds.length) { %>
+    <div class="msg warn" role="alert">
+      <%= s.bedsFree > 0
+        ? 'The ' + s.bedsFree + ' free bed(s) are reserved for higher-priority patients waiting in the queue.'
+        : 'No suitable bed is available.' %>
+    </div>
+  <% } %>
+
+  <% if (canAllocate) { %>
+  <form method="post" action="/allocations/patient/<%= patient.id %>/review">
+    <h2>Doctor</h2>
+    <% s.doctors.forEach((d, i) => { %>
+      <label class="opt"><input type="radio" name="doctor_id" value="<%= d.id %>" <%= i === 0 ? 'checked' : '' %>> <%= d.name %> (<%= d.specialization %>)</label>
+    <% }) %>
+
+    <h2>Bed</h2>
+    <% s.beds.forEach((b, i) => { %>
+      <label class="opt"><input type="radio" name="bed_id" value="<%= b.id %>" <%= i === 0 ? 'checked' : '' %>> <%= b.bed_number %> (<%= b.ward_type %> ward)</label>
+    <% }) %>
+
+    <h2>Equipment (optional)</h2>
+    <label class="opt"><input type="radio" name="equipment_id" value="" checked> None</label>
+    <% s.equipment.forEach(e => { %>
+      <label class="opt"><input type="radio" name="equipment_id" value="<%= e.id %>"> <%= e.name %> (<%= e.type %>)</label>
+    <% }) %>
+
+    <div class="actions">
+      <button class="btn" type="submit">Review allocation</button>
+      <a class="btn secondary" href="/allocations">Cancel</a>
+    </div>
+  </form>
+  <% } else { %>
+  <form method="post" action="/allocations/patient/<%= patient.id %>/pending">
+    <div class="actions">
+      <button class="btn" type="submit">Add to pending queue</button>
+      <a class="btn secondary" href="/allocations">Back</a>
+    </div>
+  </form>
+  <% } %>
+
+  <h2>Equipment status</h2>
+  <% if (!s.equipment.length) { %><p>No equipment is available right now. You can continue without equipment.</p><% } %>
+  <table>
+    <thead><tr><th>Equipment</th><th>Type</th><th>Status</th></tr></thead>
+    <tbody>
+    <% s.equipmentAll.forEach(e => { %>
+      <tr><td><%= e.name %></td><td><%= e.type %></td><td><%= e.status %></td></tr>
+    <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('footer') %>

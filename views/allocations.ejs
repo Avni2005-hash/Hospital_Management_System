@@ -1,0 +1,82 @@
+<%- include('header') %>
+<div class="panel">
+  <h1>Resource allocation</h1>
+  <% if (ok) { %><div class="msg ok" role="status"><%= ok %></div><% } %>
+  <% if (err) { %><div class="msg err" role="alert"><%= err %></div><% } %>
+
+  <h2>Patients</h2>
+  <% if (!patients.length) { %>
+    <p>No active patients. Register a patient first.</p>
+  <% } else { %>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>ID</th><th>Patient</th><th>Department</th><th>Priority</th><th>Allocation</th><th></th></tr></thead>
+    <tbody>
+    <% patients.forEach(p => { %>
+      <tr>
+        <td><%= p.id %></td>
+        <td><%= p.first_name %> <%= p.last_name %></td>
+        <td><%= p.department %></td>
+        <td><span class="badge <%= p.priority %>"><%= p.priority %></span></td>
+        <td><% if (p.alloc_status) { %><span class="badge <%= p.alloc_status %>"><%= p.alloc_status %></span><% } else { %>Not allocated<% } %></td>
+        <td><% if (p.alloc_status !== 'Confirmed') { %><a class="btn" href="/allocations/patient/<%= p.id %>">Allocate</a><% } %></td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% } %>
+
+  <h2>Pending queue (highest priority first)</h2>
+  <% if (!pending.length) { %>
+    <p>No requests are waiting.</p>
+  <% } else { %>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>#</th><th>Patient</th><th>Department</th><th>Priority</th><th>Waiting since</th><th></th></tr></thead>
+    <tbody>
+    <% pending.forEach((a, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><%= a.first_name %> <%= a.last_name %></td>
+        <td><%= a.department %></td>
+        <td><span class="badge <%= a.priority %>"><%= a.priority %></span></td>
+        <td><%= a.created %></td>
+        <td>
+          <a class="btn" href="/allocations/patient/<%= a.patient_id %>">Allocate</a>
+          <form class="inline" method="post" action="/allocations/<%= a.id %>/cancel"><button class="btn danger" type="submit">Cancel</button></form>
+        </td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% } %>
+
+  <h2>Allocation records</h2>
+  <% if (!records.length) { %>
+    <p>No allocation records yet.</p>
+  <% } else { %>
+  <div style="overflow-x:auto"><table>
+    <thead><tr><th>ID</th><th>Patient</th><th>Priority</th><th>Doctor</th><th>Bed</th><th>Equipment</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    <% records.forEach(a => { %>
+      <tr>
+        <td><%= a.id %></td>
+        <td><%= a.first_name %> <%= a.last_name %></td>
+        <td><span class="badge <%= a.priority %>"><%= a.priority %></span></td>
+        <td><%= a.doctor_name || '-' %></td>
+        <td><%= a.bed_number ? a.bed_number + ' (' + a.ward_type + ')' : '-' %></td>
+        <td><%= a.equipment_name || '-' %></td>
+        <td><span class="badge <%= a.status %>"><%= a.status %></span></td>
+        <td>
+          <% if (a.status === 'Requested') { %>
+            <a class="btn secondary" href="/allocations/<%= a.id %>/review">Review</a>
+            <form class="inline" method="post" action="/allocations/<%= a.id %>/cancel"><button class="btn danger" type="submit">Cancel</button></form>
+          <% } else if (a.status === 'Confirmed') { %>
+            <form class="inline" method="post" action="/allocations/<%= a.id %>/complete"><button class="btn secondary" type="submit">Complete</button></form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+    </tbody>
+  </table></div>
+  <% } %>
+</div>
+<%- include('footer') %>

@@ -39,6 +39,16 @@
   .badge.Routine { background:#e9f6ef; color:var(--ok); }
   .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
   .top h1 { margin:0; }
+  h2 { font-size:17px; margin:24px 0 10px; }
+  label.opt { display:flex; align-items:center; gap:8px; font-weight:400; margin:6px 0; padding:8px 10px; border:1px solid var(--line); border-radius:4px; }
+  label.opt input { width:auto; }
+  form.inline { display:inline; margin:0; }
+  .btn.danger { background:#fff; color:var(--err); border:1px solid var(--err); }
+  .badge.Requested { background:#e3f0f7; color:var(--brand); }
+  .badge.PendingUnavailable { background:#fff4e0; color:var(--warn); }
+  .badge.Confirmed { background:#e9f6ef; color:var(--ok); }
+  .badge.Completed { background:#eceff3; color:var(--muted); }
+  .badge.Cancelled { background:#fdecea; color:var(--err); }
 </style>
 </head>
 <body>
@@ -46,6 +56,7 @@
   <span class="title">Hospital Resource Allocation</span>
   <% if (user) { %>
     <a href="/patients">Patients</a>
+    <a href="/allocations">Allocation</a>
     <span><%= user.username %> (<%= user.role %>)</span>
     <form method="post" action="/logout"><button class="btn link" type="submit">Log out</button></form>
   <% } %>

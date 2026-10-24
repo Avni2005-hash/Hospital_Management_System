@@ -1,11 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const pool = require('../config/db');
+const asyncHandler = require('../middleware/asyncHandler');
 const router = express.Router();
 
 router.get('/login', (req, res) => res.render('login', { error: null }));
 
-router.post('/login', async (req, res) => {
+router.post('/login', asyncHandler(async (req, res) => {
   const { username = '', password = '' } = req.body;
   if (!username.trim() || !password) {
     return res.render('login', { error: 'Enter your username and password.' });
@@ -17,7 +18,7 @@ router.post('/login', async (req, res) => {
   }
   req.session.user = { id: u.id, username: u.username, role: u.role };
   res.redirect('/patients');
-});
+}));
 
 // NFR-SEC-08: session is destroyed on logout
 router.post('/logout', (req, res) => req.session.destroy(() => res.redirect('/login')));
